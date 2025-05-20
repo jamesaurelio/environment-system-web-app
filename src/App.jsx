@@ -8,7 +8,10 @@ function App() {
   const handleToggle = () => {
     setIsOn(prev => {
       const newState = !prev;
-      console.log(`System turned ${newState ? 'ON' : 'OFF'}`);
+      const body = document.body;
+      body.style.backgroundColor = newState ? '#f0f0f0' : '#282c34';
+      body.style.color = newState ? '#000' : '#fff';
+      console.log(`Switch is now ${newState ? 'ON' : 'OFF'}`);
       return newState;
     });
   };
