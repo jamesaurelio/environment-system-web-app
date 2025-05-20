@@ -17,7 +17,7 @@ function App() {
   };
 
   const sensorData = {
-    temperature: 50,
+    temperature: 70,
     humidity: 55,
     co2: 400,
     light: 750,
