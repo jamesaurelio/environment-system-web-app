@@ -31,13 +31,35 @@ body {
   border-radius: 60px;
 }
 
+.logo-on {
+  opacity: 1;
+  transform: scale(1.05);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.logo-off {
+  opacity: 0.4;
+  transition: opacity 0.5s ease;
+}
+
 .title-container {
   flex: 1;
 }
 
-h1 {
+.title {
   text-align: right;
   margin-bottom: 24px;
+}
+
+.title-on {
+  transition: color 0.5s ease-in, transform 0.5s ease;
+  color: #1c1c2e;
+}
+
+.title-off {
+  color: #fff;
+  transform: scale(0.95);
+  transition: transform 0.5s ease, font-style 0.5s ease;
 }
 
 .card-grid {
