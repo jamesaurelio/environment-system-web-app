@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Card from './components/Card';
 import './App.css';
-import Logo from './assets/leaf.jpg';
+import Logo from './assets/logo.png';
 
 function App() {
   const [isOn, setIsOn] = useState(false);
@@ -27,10 +27,10 @@ function App() {
     <div className="app-container">
       <div className="header">
         <div className="logo-container">
-          <img src={Logo} alt="Logo" className="logo"/>
+          <img src={Logo} alt="Logo" className={`logo ${isOn ? 'logo-on' : 'logo-off'}`}/>
         </div>
         <div className="title-container">
-          <h1>Environment Monitor Dashboard</h1>
+          <h1 className={`title ${isOn ? 'title-on' : 'title-off'}`}>EnviroGrow Monitoring Dashboard</h1>
         </div>
       </div>
 
