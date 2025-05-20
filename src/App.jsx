@@ -9,7 +9,7 @@ function App() {
     setIsOn(prev => {
       const newState = !prev;
       const body = document.body;
-      body.style.backgroundColor = newState ? '#f0f0f0' : '#282c34';
+      body.style.backgroundColor = newState ? '#8fd9fb' : '#282c34';
       body.style.color = newState ? '#000' : '#fff';
       console.log(`Switch is now ${newState ? 'ON' : 'OFF'}`);
       return newState;
