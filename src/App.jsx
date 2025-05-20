@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
-import Card from './components/Card'; 
-import './App.css'; 
+import Card from './components/Card';
+import './App.css';
+import Logo from './assets/leaf.jpg';
 
 function App() {
-  const [isOn, setIsOn] = useState(false); 
+  const [isOn, setIsOn] = useState(false);
 
   const handleToggle = () => {
     setIsOn(prev => {
       const newState = !prev;
       const body = document.body;
       body.style.backgroundColor = newState ? '#8fd9fb' : '#282c34';
-      body.style.color = newState ? '#000' : '#fff';
       console.log(`Switch is now ${newState ? 'ON' : 'OFF'}`);
       return newState;
     });
   };
 
   const sensorData = {
-    temperature: 70,
+    temperature: 30,
     humidity: 55,
     co2: 400,
     light: 750,
@@ -25,7 +25,14 @@ function App() {
 
   return (
     <div className="app-container">
-      <h1>Environment Monitor Dashboard</h1>
+      <div className="header">
+        <div className="logo-container">
+          <img src={Logo} alt="Logo" className="logo"/>
+        </div>
+        <div className="title-container">
+          <h1>Environment Monitor Dashboard</h1>
+        </div>
+      </div>
 
       <div className="card-grid">
         <Card title="Temperature" value={`${sensorData.temperature} °C`} isOn={isOn} />

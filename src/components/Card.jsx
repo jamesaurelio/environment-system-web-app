@@ -22,8 +22,8 @@ function Card({ title, value, isOn }) {
 
   return (
     <div className={`card ${isOn ? 'card-on' : 'card-off'}`}>
-      <h2>{title}</h2>
-      <p>{`${value}`}</p>
+      <h2 className='card-title'>{title}</h2>
+      <p className='card-value'>{`${value}`}</p>
 
       {isHumidity && (
         <div className="circular-wrapper">
