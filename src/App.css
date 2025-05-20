@@ -16,15 +16,30 @@ body {
 h1 {
   text-align: center;
   margin-bottom: 24px;
-  font-weight: 700;
 }
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 16px;
   margin-bottom: 32px;
-  font-weight: 100;
+}
+
+.card {
+  background-color: #1c1c2e;
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.card.off {
+  background-color: #831818; /* Gray color when OFF */
+}
+
+.card:hover {
+  transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
 .controls {
@@ -33,20 +48,71 @@ h1 {
   gap: 16px;
 }
 
-.btn {
-  padding: 12px 24px;
-  font-size: 16px;
-  border: none;
-  border-radius: 6px;
+.off-state {
+  display: flex;
+  flex-direction: column;
+  height: 50vh; /* Center the button vertically */
+}
+
+.switch-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+  gap: 12px;
+}
+
+.switch-label {
+  font-weight: bold;
+  color: #333;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
   cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
 }
 
-.btn.on {
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px; width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
   background-color: #4caf50;
-  color: white;
 }
 
-.btn.off {
-  background-color: #f44336;
-  color: white;
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* Optional round styling */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
