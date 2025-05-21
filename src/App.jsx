@@ -27,10 +27,17 @@ function App() {
     <div className="app-container">
       <div className="header">
         <div className="logo-container">
-          <img src={Logo} alt="Logo" className={`logo ${isOn ? 'logo-on' : 'logo-off'}`}/>
+          <img src={Logo} alt="Logo" className={`logo ${isOn ? 'logo-on' : 'logo-off'}`} />
         </div>
         <div className="title-container">
-          <h1 className={`title ${isOn ? 'title-on' : 'title-off'}`}>EnviroGrow Monitoring Dashboard</h1>
+          <h1 className={`title ${isOn ? 'title-on' : 'title-off'}`}>KLIMA-X Monitoring Dashboard</h1>
+        </div>
+        <div className="switch-container">
+          <label className="switch">
+            <input type="checkbox" checked={isOn} onChange={handleToggle} />
+            <span className="slider round"></span>
+          </label>
+          <span className="switch-label">{isOn ? 'ON' : 'OFF'}</span>
         </div>
       </div>
 
@@ -39,14 +46,6 @@ function App() {
         <Card title="Humidity" value={`${sensorData.humidity} %`} isOn={isOn} />
         <Card title="CO₂" value={`${sensorData.co2} ppm`} isOn={isOn} />
         <Card title="Light" value={`${sensorData.light} lux`} isOn={isOn} />
-      </div>
-
-      <div className="switch-container">
-        <label className="switch">
-          <input type="checkbox" checked={isOn} onChange={handleToggle} />
-          <span className="slider round"></span>
-        </label>
-        <span className="switch-label">{isOn ? 'ON' : 'OFF'}</span>
       </div>
     </div>
   );
