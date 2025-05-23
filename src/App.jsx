@@ -24,7 +24,7 @@ function App() {
   };
 
   return (
-    <div className="app-container">
+    <>
       <div className="header">
         <div className="logo-container">
           <img src={Logo} alt="Logo" className={`logo ${isOn ? 'logo-on' : 'logo-off'}`} />
@@ -41,13 +41,16 @@ function App() {
         </div>
       </div>
 
-      <div className="card-grid">
-        <Card title="Temperature" value={`${sensorData.temperature} °C`} isOn={isOn} />
-        <Card title="Humidity" value={`${sensorData.humidity} %`} isOn={isOn} />
-        <Card title="CO₂" value={`${sensorData.co2} ppm`} isOn={isOn} />
-        <Card title="Light" value={`${sensorData.light} lux`} isOn={isOn} />
+      <div className="app-container">
+
+        <div className="card-grid">
+          <Card title="Temperature" value={`${sensorData.temperature} °C`} isOn={isOn} />
+          <Card title="Humidity" value={`${sensorData.humidity} %`} isOn={isOn} />
+          <Card title="CO₂" value={`${sensorData.co2} ppm`} isOn={isOn} />
+          <Card title="Light" value={`${sensorData.light} lux`} isOn={isOn} />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
