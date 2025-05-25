@@ -21,8 +21,8 @@ body {
 }
 
 .logo-container {
-  flex: 0 0 60px;
-  height: 60px;
+  flex: 0 0 100px;
+  height: 100px;
 }
 
 .logo {
@@ -31,13 +31,36 @@ body {
   border-radius: 60px;
 }
 
-.title-container {
-  flex: 1;
+.logo-on {
+  opacity: 1;
+  transform: scale(1.05);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-h1 {
-  text-align: right;
+.logo-off {
+  opacity: 0.4;
+  transition: opacity 0.5s ease;
+}
+
+.title-container {
+  flex: 1;
+  margin-left: 16px;
+}
+
+.title {
+  text-align: left;
   margin-bottom: 24px;
+}
+
+.title-on {
+  transition: color 0.5s ease-in, transform 0.5s ease;
+  color: #1c1c2e;
+}
+
+.title-off {
+  color: #fff;
+  transform: scale(0.95);
+  transition: transform 0.5s ease, font-style 0.5s ease;
 }
 
 .card-grid {
@@ -83,8 +106,8 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 24px;
   gap: 12px;
+  margin-right: 16px;
 }
 
 .switch-label {

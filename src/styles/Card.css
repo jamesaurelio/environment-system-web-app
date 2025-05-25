@@ -10,6 +10,7 @@
 .card-off {
   opacity: 0.4;
   transform: scale(0.97);
+  pointer-events: none;
 }
 
 /* Full opacity when on */
@@ -26,7 +27,7 @@
 
 .circular-chart {
   max-width: 80px;
-  max-height: 80px;
+  max-height: 70px;
 }
 
 .circle-bg {
