@@ -6,21 +6,46 @@ import Logo from './assets/logo.png';
 function App() {
   const [isOn, setIsOn] = useState(false);
 
-  const handleToggle = () => {
-    setIsOn(prev => {
-      const newState = !prev;
-      const body = document.body;
-      body.style.backgroundColor = newState ? '#8fd9fb' : '#282c34';
-      console.log(`Switch is now ${newState ? 'ON' : 'OFF'}`);
-      return newState;
-    });
-  };
-
   const sensorData = {
     temperature: 30,
     humidity: 55,
     co2: 400,
     light: 750,
+  };
+
+  const handleToggle = () => {
+    setIsOn(prev => {
+      const newState = !prev;
+      document.body.style.backgroundColor = newState ? '#8fd9fb' : '#282c34';
+      console.log(`Switch is now ${newState ? 'ON' : 'OFF'}`);
+      
+      // Send data only when toggled ON
+      if (!prev) {
+        sendSensorData(sensorData);
+      }
+
+      return newState;
+    });
+  };
+
+  const sendSensorData = async (data) => {
+    try {
+      const response = await fetch('http://localhost:8081/api/formdata', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send sensor data');
+      }
+
+      console.log('Sensor data sent successfully');
+    } catch (error) {
+      console.error('Error sending sensor data:', error);
+    }
   };
 
   return (
@@ -42,7 +67,6 @@ function App() {
       </div>
 
       <div className="app-container">
-
         <div className="card-grid">
           <Card title="Temperature" value={`${sensorData.temperature} °C`} isOn={isOn} />
           <Card title="Humidity" value={`${sensorData.humidity} %`} isOn={isOn} />
