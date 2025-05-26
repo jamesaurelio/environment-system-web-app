@@ -7,7 +7,7 @@ function App() {
   const [isOn, setIsOn] = useState(false);
 
   const sensorData = {
-    temperature: 30,
+    temperature: 50,
     humidity: 55,
     co2: 400,
     light: 750,
