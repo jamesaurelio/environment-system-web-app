@@ -77,7 +77,8 @@ function Card({ title, value, isOn }) {
           </svg>
         </div>
       )}
-        {lowerTitle === 'co₂' && (
+      
+      {lowerTitle === 'co₂' && (
         <div className="circular-wrapper">
           <svg viewBox="0 0 36 36" className="circular-chart co2">
             <path className="circle-bg"
@@ -87,8 +88,8 @@ function Card({ title, value, isOn }) {
             <path className="circle"
               stroke={
                 numericValue < 600 ? "#00cc66" :
-                numericValue <= 1000 ? "#ffaa00" :
-                "#ff4d4f"
+                  numericValue <= 1000 ? "#ffaa00" :
+                    "#ff4d4f"
               }
               strokeDasharray={`${Math.min(numericValue / 1500 * 100, 100)}, 100`}
               d="M18 2.0845
