@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from './components/Card';
 import './App.css';
 import Logo from './assets/logo.png';
@@ -6,27 +6,35 @@ import Logo from './assets/logo.png';
 function App() {
   const [isOn, setIsOn] = useState(false);
 
-  const sensorData = {
-    temperature: 30,
-    humidity: 55,
-    co2: 400,
-    light: 750,
-  };
+  const [data, setData] = useState({});
 
-  const handleToggle = () => {
-    setIsOn(prev => {
-      const newState = !prev;
-      document.body.style.backgroundColor = newState ? '#8fd9fb' : '#282c34';
-      console.log(`Switch is now ${newState ? 'ON' : 'OFF'}`);
-      
-      // Send data only when toggled ON
-      if (!prev) {
-        sendSensorData(sensorData);
-      }
+  useEffect(() => {
+    const fetchData = () => {
+      fetch("http://localhost:8081/api/formdata")
+        .then(res => res.json())
+        .then(json => setData(json.length ? json[json.length - 1] : {}))
+        .catch(err => console.error(err));
+    };
 
-      return newState;
-    });
-  };
+    fetchData();
+    const interval = setInterval(fetchData, 5000); // every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+ const handleToggle = () => {
+  setIsOn(prev => {
+    const newState = !prev;
+    document.body.style.backgroundColor = newState ? '#8fd9fb' : '#282c34';
+    console.log(`Switch is now ${newState ? 'ON' : 'OFF'}`);
+
+    if (!prev) {
+      sendSensorData(data);  // use latest data from state
+    }
+
+    return newState;
+  });
+};
 
   const sendSensorData = async (data) => {
     try {
@@ -68,10 +76,10 @@ function App() {
 
       <div className="app-container">
         <div className="card-grid">
-          <Card title="Temperature" value={`${sensorData.temperature} °C`} isOn={isOn} />
-          <Card title="Humidity" value={`${sensorData.humidity} %`} isOn={isOn} />
-          <Card title="CO₂" value={`${sensorData.co2} ppm`} isOn={isOn} />
-          <Card title="Light" value={`${sensorData.light} lux`} isOn={isOn} />
+          <Card title="Temperature" value={`${Number(data.temperature).toFixed(2)} °C`} isOn={isOn} />
+          <Card title="Humidity" value={`${data.humidity} %`} isOn={isOn} />
+          <Card title="CO₂" value={`${data.co2} ppm`} isOn={isOn} />
+          <Card title="Light" value={`${Number(data.light).toFixed(2)} lux`} isOn={isOn} />
         </div>
       </div>
     </>

@@ -5,7 +5,6 @@ const bodyParser = require("body-parser");
 
 
 
-
 const allowedOrigins = ["http://localhost:5173"];
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 
@@ -14,7 +13,7 @@ app.use(bodyParser.json());
 // Sample in-memory database (instead of MongoDB)
 let formData = [];
 
-// Handle form submission
+// Handle sensor data 
 app.post("/api/formdata", (req, res) => {
   formData.push(req.body);
   res.status(200).json({ message: "Form data saved successfully", data: req.body });
