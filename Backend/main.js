@@ -28,7 +28,7 @@ app.get("/api/control", (req, res) => {
   res.status(200).json({ state: deviceState });
 });
 
-// Submit sensor data
+// Handle sensor data 
 app.post("/api/formdata", (req, res) => {
   formData.push(req.body);
   res.status(200).json({ message: "Form data saved successfully", data: req.body });
@@ -39,7 +39,7 @@ app.get("/api/formdata", (req, res) => {
   res.status(200).json(formData);
 });
 
-// ✅ NEW: Combined API for latest status
+// NEW: Combined API for latest status
 app.get("/api/status", (req, res) => {
   const latestData = formData.length > 0 ? formData[formData.length - 1] : null;
   res.status(200).json({
