@@ -19,6 +19,8 @@ function App() {
       document.body.style.backgroundColor = newState ? '#8fd9fb' : '#282c34';
       console.log(`Switch is now ${newState ? 'ON' : 'OFF'}`);
       
+      sendControlSignal(newState ? 'ON' : 'OFF');
+
       // Send data only when toggled ON
       if (!prev) {
         sendSensorData(sensorData);
@@ -28,23 +30,38 @@ function App() {
     });
   };
 
-  const sendSensorData = async (data) => {
+    const sendSensorData = async (data) => {
+      try {
+        const response = await fetch('http://localhost:8081/api/formdata', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to send sensor data');
+        }
+
+        console.log('Sensor data sent successfully');
+      } catch (error) {
+        console.error('Error sending sensor data:', error);
+      }
+    };
+
+    const sendControlSignal = async (state) => {
     try {
-      const response = await fetch('http://localhost:8081/api/formdata', {
+      const response = await fetch('http://localhost:8081/api/control', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ state }), // { state: 'ON' or 'OFF' }
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to send sensor data');
-      }
-
-      console.log('Sensor data sent successfully');
+      if (!response.ok) throw new Error('Failed to send control state');
+      console.log('Control state sent successfully');
     } catch (error) {
-      console.error('Error sending sensor data:', error);
+      console.error('Error sending control state:', error);
     }
   };
 
