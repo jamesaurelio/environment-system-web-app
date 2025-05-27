@@ -10,7 +10,7 @@ function App() {
 
   useEffect(() => {
     const fetchData = () => {
-      fetch("http://localhost:8081/api/formdata")
+      fetch("http://localhost:8081/api/sensorData")
         .then(res => res.json())
         .then(json => setData(json.length ? json[json.length - 1] : {}))
         .catch(err => console.error(err));
@@ -40,7 +40,7 @@ function App() {
 
     const sendSensorData = async (data) => {
       try {
-        const response = await fetch('http://localhost:8081/api/formdata', {
+        const response = await fetch('http://localhost:8081/api/sensorData', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

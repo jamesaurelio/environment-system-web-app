@@ -9,7 +9,7 @@ app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(bodyParser.json());
 
 // In-memory storage
-let formData = [];
+let sensorData = [];
 let deviceState = "OFF"; // Initial state
 
 // Set device ON/OFF state
@@ -28,24 +28,24 @@ app.get("/api/control", (req, res) => {
   res.status(200).json({ state: deviceState });
 });
 
-// Handle sensor data 
-app.post("/api/formdata", (req, res) => {
-  formData.push(req.body);
-  res.status(200).json({ message: "Form data saved successfully", data: req.body });
-});
-
-// Get all sensor data
-app.get("/api/formdata", (req, res) => {
-  res.status(200).json(formData);
-});
-
 // NEW: Combined API for latest status
 app.get("/api/status", (req, res) => {
-  const latestData = formData.length > 0 ? formData[formData.length - 1] : null;
+  const latestData = sensorData.length > 0 ? sensorData[sensorData.length - 1] : null;
   res.status(200).json({
     deviceState,
     latestSensorData: latestData,
   });
+});
+
+// Handle sensor data 
+app.post("/api/sensorData", (req, res) => {
+  sensorData.push(req.body);
+  res.status(200).json({ message: "Form data saved successfully", data: req.body });
+});
+
+// Get all sensor data
+app.get("/api/sensorData", (req, res) => {
+  res.status(200).json(sensorData);
 });
 
 // Start server
