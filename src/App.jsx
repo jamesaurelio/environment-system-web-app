@@ -101,7 +101,7 @@ function App() {
   <div className="app-container">
     <div className="card-grid">
       <Card title="Temperature" value={`${Number(data.temperature).toFixed(2)} °C`} isOn={isOn} />
-      <Card title="Humidity" value={`${data.humidity} %`} isOn={isOn} />
+      <Card title="Humidity" value={`${Number(data.humidity).toFixed(2)} %`} isOn={isOn} />
       <Card title="CO₂" value={`${data.co2} ppm`} isOn={isOn} />
       <Card title="Light" value={`${Number(data.light).toFixed(2)} lux`} isOn={isOn} />
     </div>
