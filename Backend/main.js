@@ -40,7 +40,7 @@ app.get("/api/status", (req, res) => {
 // Handle sensor data 
 app.post("/api/sensorData", (req, res) => {
   sensorData.push(req.body);
-  res.status(200).json({ message: "Form data saved successfully", data: req.body });
+  res.status(200).json({ message: "Sensor data saved successfully", data: req.body });
 });
 
 // Get all sensor data
