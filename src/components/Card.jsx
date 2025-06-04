@@ -15,10 +15,10 @@ function Card({ title, value, isOn }) {
 
   // Icon & color for light level (lux)
   let lightIcon = "🌙"; // moon
-  if (numericValue > 800) lightIcon = "🌞";
-  else if (numericValue > 400) lightIcon = "🌤️";
+  if (numericValue >= 5000) lightIcon = "🌞";
+  else if (numericValue > 1000) lightIcon = "🌤️";
 
-  const lightPercent = Math.min((numericValue / 1000) * 100, 100); // clamp at 100
+  const lightPercent = Math.min((numericValue / 10000) * 100, 100); // clamp at 100
 
   return (
     <div className={`card ${isOn ? 'card-on' : 'card-off'}`}>

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Card from './components/Card';
 import './App.css';
 import Logo from './assets/logo.png';
+import Graphs from './components/Graphs';
 
 function App() {
   const [isOn, setIsOn] = useState(false);
-
   const [data, setData] = useState({});
 
   useEffect(() => {
@@ -105,6 +105,10 @@ function App() {
       <Card title="CO₂" value={`${data.co2} ppm`} isOn={isOn} />
       <Card title="Light" value={`${Number(data.light).toFixed(2)} lux`} isOn={isOn} />
     </div>
+  </div>
+
+  <div>
+    <Graphs />
   </div>
 </>
 
