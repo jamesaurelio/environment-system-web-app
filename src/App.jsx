@@ -6,21 +6,36 @@ import Graphs from './components/Graphs';
 
 function App() {
   const [isOn, setIsOn] = useState(false);
-  const [data, setData] = useState({});
+  const [dataArray, setDataArray] = useState([]);
+  const latestData = dataArray[dataArray.length - 1] || {};
 
   useEffect(() => {
     const fetchData = () => {
       fetch("http://localhost:8081/api/sensorData")
         .then(res => res.json())
-        .then(json => setData(json.length ? json[json.length - 1] : {}))
+        .then(json => {
+          const newData = json.length ? json[json.length - 1] : null;
+          if (newData) {
+            setDataArray(prev => {
+              // Compare newData timestamp with last item in prev
+              if (prev.length === 0 || newData.timestamp !== prev[prev.length - 1].timestamp) {
+                const updated = [...prev, newData];
+                return updated.slice(-5);
+              }
+              // No new data - return previous unchanged
+              return prev;
+            });
+          }
+        })
         .catch(err => console.error(err));
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 5000); // every 5 seconds
+    const interval = setInterval(fetchData, 5000);
 
     return () => clearInterval(interval);
   }, []);
+
 
   const handleToggle = () => {
     setIsOn(prev => {
@@ -31,7 +46,7 @@ function App() {
       sendControlSignal(newState ? 'ON' : 'OFF');
 
       if (!prev) {
-        sendSensorData(data);  // use latest data from state
+        sendSensorData(latestData);  // use latest data from state
       }
 
       return newState;
@@ -99,22 +114,22 @@ function App() {
       {/* Main content */}
       <div className="app-container">
         <div className="card-grid">
-          <Card title="Temperature" value={`${Number(data.temperature).toFixed(2)} °C`} isOn={isOn} />
-          <Card title="Humidity" value={`${Number(data.humidity).toFixed(2)} %`} isOn={isOn} />
-          <Card title="CO₂" value={`${data.co2} ppm`} isOn={isOn} />
-          <Card title="Light" value={`${Number(data.light).toFixed(2)} lux`} isOn={isOn} />
+          <Card title="Temperature" value={`${Number(latestData.temperature).toFixed(2)} °C`} isOn={isOn} />
+          <Card title="Humidity" value={`${Number(latestData.humidity).toFixed(2)} %`} isOn={isOn} />
+          <Card title="CO₂" value={`${latestData.co2} ppm`} isOn={isOn} />
+          <Card title="Light" value={`${Number(latestData.light).toFixed(2)} lux`} isOn={isOn} />
         </div>
       </div>
 
-      <div style={{textAlign: 'center'}}>
+      <div style={{ textAlign: 'center' }}>
         <h2>🌡️ Temperature 🌡️</h2>
-        <Graphs title="Temperature" eul={`${Number(data.T_eul)}`} rk4={`${Number(data.T_rk4)}`} isOn={isOn}/>
+        <Graphs title="Temperature" data={dataArray} eulKey="T_eul" rk4Key="T_rk4" />
         <h2>💧 Humidity 💧</h2>
-        <Graphs title="Humidity" eul={`${Number(data.H_eul)}`} rk4={`${Number(data.H_rk4)}`} isOn={isOn}/>
+        <Graphs title="Humidity" data={dataArray} eulKey="H_eul" rk4Key="H_rk4" />
         <h2>🟢 Carbon Dioxide 🟢</h2>
-        <Graphs title="CO2" eul={`${Number(data.C_eul)}`} rk4={`${Number(data.C_rk4)}`} isOn={isOn}/>
+        <Graphs title="CO₂" data={dataArray} eulKey="C_eul" rk4Key="C_rk4" />
         <h2>🌞 Light 🌞</h2>
-        <Graphs title="Light" eul={`${Number(data.L_eul)}`} rk4={`${Number(data.L_rk4)}`} isOn={isOn}/>
+        <Graphs title="Light" data={dataArray} eulKey="L_eul" rk4Key="L_rk4" />
       </div>
     </>
 

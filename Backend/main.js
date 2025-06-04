@@ -39,9 +39,19 @@ app.get("/api/status", (req, res) => {
 
 // Handle sensor data 
 app.post("/api/sensorData", (req, res) => {
-  sensorData.push(req.body);
-  res.status(200).json({ message: "Sensor data saved successfully", data: req.body });
+  const dataWithTimestamp = {
+    ...req.body,
+    timestamp: new Date().toISOString()
+  };
+
+  sensorData.push(dataWithTimestamp);
+
+  res.status(200).json({ 
+    message: "Sensor data saved successfully", 
+    data: dataWithTimestamp 
+  });
 });
+
 
 // Get all sensor data
 app.get("/api/sensorData", (req, res) => {
