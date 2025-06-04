@@ -107,8 +107,15 @@ function App() {
         </div>
       </div>
 
-      <div>
-        <Graphs />
+      <div style={{textAlign: 'center'}}>
+        <h2>🌡️ Temperature 🌡️</h2>
+        <Graphs title="Temperature" eul={`${Number(data.T_eul)}`} rk4={`${Number(data.T_rk4)}`} isOn={isOn}/>
+        <h2>💧 Humidity 💧</h2>
+        <Graphs title="Humidity" eul={`${Number(data.H_eul)}`} rk4={`${Number(data.H_rk4)}`} isOn={isOn}/>
+        <h2>🟢 Carbon Dioxide 🟢</h2>
+        <Graphs title="CO2" eul={`${Number(data.C_eul)}`} rk4={`${Number(data.C_rk4)}`} isOn={isOn}/>
+        <h2>🌞 Light 🌞</h2>
+        <Graphs title="Light" eul={`${Number(data.L_eul)}`} rk4={`${Number(data.L_rk4)}`} isOn={isOn}/>
       </div>
     </>
 
