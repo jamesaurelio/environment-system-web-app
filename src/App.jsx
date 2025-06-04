@@ -75,7 +75,6 @@ function App() {
 
   return (
     <>
-      {/* Always visible header */}
       <div className="header">
         <div className="logo-container">
           <img src={Logo} alt="Logo" className={`logo ${isOn ? 'logo-on' : 'logo-off'}`} />
