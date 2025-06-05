@@ -5,11 +5,46 @@ import Logo from './assets/logo.png';
 import Graphs from './components/Graphs';
 
 function App() {
+  // ===== LOGIN STATE =====
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  // ===== DASHBOARD STATE =====
   const [isOn, setIsOn] = useState(false);
   const [dataArray, setDataArray] = useState([]);
   const latestData = dataArray[dataArray.length - 1] || {};
 
+  // ===== LOGIN HANDLER =====
+  const validUser = 'KLIMA-X';        // hardcoded username
+  const validPass = 'klima123';  // hardcoded password
+
+   // ===== LOGOUT HANDLER =====
+  const handleLogout = () => {
+    setLoggedIn(false);
+    setUsername('');
+    setPassword('');
+    setError('');
+    setIsOn(false);
+    setDataArray([]);
+    document.body.style.backgroundColor = '#000000'; // reset background
+  };
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (username === validUser && password === validPass) {
+      setLoggedIn(true);
+      setError('');
+    } else {
+      setError('Invalid username or password');
+    }
+  };
+
+  // ===== DATA FETCHING =====
   useEffect(() => {
+    if (!loggedIn) return; // only fetch if logged in
+
     const fetchData = () => {
       fetch("http://localhost:8081/api/sensorData")
         .then(res => res.json())
@@ -17,12 +52,10 @@ function App() {
           const newData = json.length ? json[json.length - 1] : null;
           if (newData) {
             setDataArray(prev => {
-              // Compare newData timestamp with last item in prev
               if (prev.length === 0 || newData.timestamp !== prev[prev.length - 1].timestamp) {
                 const updated = [...prev, newData];
                 return updated.slice(-5);
               }
-              // No new data - return previous unchanged
               return prev;
             });
           }
@@ -34,9 +67,9 @@ function App() {
     const interval = setInterval(fetchData, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [loggedIn]);
 
-
+  // ===== TOGGLE HANDLER =====
   const handleToggle = () => {
     setIsOn(prev => {
       const newState = !prev;
@@ -46,41 +79,36 @@ function App() {
       sendControlSignal(newState ? 'ON' : 'OFF');
 
       if (!prev) {
-        sendSensorData(latestData);  // use latest data from state
+        sendSensorData(latestData);
       }
 
       return newState;
     });
   };
 
+  // ===== SEND SENSOR DATA =====
   const sendSensorData = async (data) => {
     try {
       const response = await fetch('http://localhost:8081/api/sensorData', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to send sensor data');
-      }
-
+      if (!response.ok) throw new Error('Failed to send sensor data');
       console.log('Sensor data sent successfully');
     } catch (error) {
       console.error('Error sending sensor data:', error);
     }
   };
 
+  // ===== SEND CONTROL SIGNAL =====
   const sendControlSignal = async (state) => {
     try {
       const response = await fetch('http://localhost:8081/api/control', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ state }), // { state: 'ON' or 'OFF' }
+        body: JSON.stringify({ state }),
       });
-
       if (!response.ok) throw new Error('Failed to send control state');
       console.log('Control state sent successfully');
     } catch (error) {
@@ -88,6 +116,42 @@ function App() {
     }
   };
 
+  // ===== RENDER LOGIN FORM IF NOT LOGGED IN =====
+  if (!loggedIn) {
+    return (
+      <div className="login-container">
+        <h2>Login to KLIMA-X Dashboard</h2>
+        <form onSubmit={handleLogin} className="login-form">
+          <div>
+            <label htmlFor="username">Username:</label><br />
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              required
+              autoComplete="username"
+            />
+          </div>
+          <div style={{ marginTop: '1rem' }}>
+            <label htmlFor="password">Password:</label><br />
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+              autoComplete="current-password"
+            />
+          </div>
+          {error && <p style={{ color: 'red', marginTop: '0.5rem' }}>{error}</p>}
+          <button type="submit" style={{ marginTop: '1rem' }}>Login</button>
+        </form>
+      </div>
+    );
+  }
+
+  // ===== RENDER DASHBOARD IF LOGGED IN =====
   return (
     <>
       <div className="header">
@@ -103,6 +167,21 @@ function App() {
             <span className="slider round"></span>
           </label>
           <span className="switch-label">{isOn ? 'ON' : 'OFF'}</span>
+          <button
+            onClick={handleLogout}
+            style={{
+              padding: '0.3rem 0.7rem',
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              borderRadius: '4px',
+              border: 'none',
+              backgroundColor: '#ff4d4d',
+              color: 'white',
+            }}
+            title="Logout"
+          >
+            Logout
+          </button>
         </div>
       </div>
 
@@ -132,7 +211,6 @@ function App() {
         <Graphs title="Light" data={dataArray} eulKey="L_eul" rk4Key="L_rk4" />
       </div>
     </>
-
   );
 }
 
