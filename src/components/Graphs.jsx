@@ -3,7 +3,7 @@ import {
   LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer
 } from "recharts";
 
-const Graph = ({ data, eulKey, rk4Key }) => (
+const Graph = ({ data, sensorKey, eulKey, rk4Key }) => (
   <div style={{ margin: "24px 24px" }}>
     <ResponsiveContainer width="100%" height={300}>
       <LineChart data={data}>
@@ -32,6 +32,7 @@ const Graph = ({ data, eulKey, rk4Key }) => (
         <Legend />
         <Line type="monotone" dataKey={eulKey} stroke="#006400" name="Euler" />
         <Line type="monotone" dataKey={rk4Key} stroke="#4b0076" name="RK4" />
+        <Line type="monotone" dataKey={sensorKey} stroke="#ff7300" name="Actual" />
       </LineChart>
     </ResponsiveContainer>
   </div>

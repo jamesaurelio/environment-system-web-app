@@ -20,7 +20,7 @@ function App() {
   const validUser = 'KLIMA-X';        // hardcoded username
   const validPass = 'klima123';  // hardcoded password
 
-   // ===== LOGOUT HANDLER =====
+  // ===== LOGOUT HANDLER =====
   const handleLogout = () => {
     setLoggedIn(false);
     setUsername('');
@@ -41,6 +41,44 @@ function App() {
     }
   };
 
+  // Numerical methods for Euler and RK4
+  const dt = 1.0;
+  let simTime = 0.0;
+
+  let T_eul = 25.0, H_eul = 50.0, C_eul = 300.0, L_eul = 1000.0;
+  let T_rk4 = 25.0, H_rk4 = 50.0, C_rk4 = 300.0, L_rk4 = 1000.0;
+
+  const rk4Step = (f, y, t, h) => {
+    const k1 = h * f(y, t);
+    const k2 = h * f(y + 0.5 * k1, t + 0.5 * h);
+    const k3 = h * f(y + 0.5 * k2, t + 0.5 * h);
+    const k4 = h * f(y + k3, t + h);
+    return (k1 + 2 * k2 + 2 * k3 + k4) / 6.0;
+  };
+
+  const external_factor = (t) => {
+    return t >= 2.0 ? 1.0 : 0.0;
+  };
+
+  const dTdt = (T, t) => {
+    const k = 0.1;
+    const ambient = 25.0;
+    return -k * (T - ambient) + external_factor(t);
+  };
+
+  const dHdt = (H) => {
+    return -0.05 * (H - 50);
+  };
+
+  const dCO2dt = (C, t) => {
+    return -0.2 * (C - 300);
+  };
+
+  const dLightdt = (L) => {
+    return 0.01 * (50000 - L);
+  };
+
+
   // ===== DATA FETCHING =====
   useEffect(() => {
     if (!loggedIn) return; // only fetch if logged in
@@ -54,6 +92,30 @@ function App() {
             setDataArray(prev => {
               if (prev.length === 0 || newData.timestamp !== prev[prev.length - 1].timestamp) {
                 const updated = [...prev, newData];
+
+                T_eul += dt * dTdt(T_eul, simTime);
+                H_eul += dt * dHdt(H_eul);
+                C_eul += dt * dCO2dt(C_eul);
+                L_eul += dt * dLightdt(L_eul);
+
+                T_rk4 += rk4Step(dTdt, T_rk4, simTime, dt);
+                H_rk4 += rk4Step(dHdt, H_rk4, simTime, dt);
+                C_rk4 += rk4Step(dCO2dt, C_rk4, simTime, dt);
+                L_rk4 += rk4Step(dLightdt, L_rk4, simTime, dt);
+
+                simTime += dt;
+                // Add computed values to the new data
+                updated[updated.length - 1] = {
+                  ...updated[updated.length - 1],
+                  T_eul,
+                  H_eul,
+                  C_eul,
+                  L_eul,
+                  T_rk4,
+                  H_rk4,
+                  C_rk4,
+                  L_rk4,
+                };
                 return updated.slice(-5);
               }
               return prev;
@@ -202,13 +264,13 @@ function App() {
 
       <div style={{ textAlign: 'center' }}>
         <h2>🌡️ Temperature 🌡️</h2>
-        <Graphs title="Temperature" data={dataArray} eulKey="T_eul" rk4Key="T_rk4" />
+        <Graphs title="Temperature" data={dataArray} sensorKey="temperature" eulKey="T_eul" rk4Key="T_rk4" />
         <h2>💧 Humidity 💧</h2>
-        <Graphs title="Humidity" data={dataArray} eulKey="H_eul" rk4Key="H_rk4" />
+        <Graphs title="Humidity" data={dataArray} sensorKey="humidity" eulKey="H_eul" rk4Key="H_rk4" />
         <h2>🟢 Carbon Dioxide 🟢</h2>
-        <Graphs title="CO₂" data={dataArray} eulKey="C_eul" rk4Key="C_rk4" />
+        <Graphs title="CO₂" data={dataArray} sensorKey="co2" eulKey="C_eul" rk4Key="C_rk4" />
         <h2>🌞 Light 🌞</h2>
-        <Graphs title="Light" data={dataArray} eulKey="L_eul" rk4Key="L_rk4" />
+        <Graphs title="Light" data={dataArray} sensorKey="light" eulKey="L_eul" rk4Key="L_rk4" />
       </div>
     </>
   );
