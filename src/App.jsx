@@ -117,12 +117,16 @@ function App() {
   };
 
   // ===== RENDER LOGIN FORM IF NOT LOGGED IN =====
-  if (!loggedIn) {
-    return (
+if (!loggedIn) {
+  return (
+    <div className="login-wrapper">
+      <div className="logo-wrapper">
+        <img src={Logo} alt="KLIMA-X Logo" className="login-logo" />
+      </div>
       <div className="login-container">
         <h2>Login to KLIMA-X Dashboard</h2>
         <form onSubmit={handleLogin} className="login-form">
-          <div>
+          <div className="form-group">
             <label htmlFor="username">Username:</label><br />
             <input
               type="text"
@@ -130,10 +134,11 @@ function App() {
               value={username}
               onChange={e => setUsername(e.target.value)}
               required
+              placeholder="Enter username"
               autoComplete="username"
             />
           </div>
-          <div style={{ marginTop: '1rem' }}>
+          <div className="form-group">
             <label htmlFor="password">Password:</label><br />
             <input
               type="password"
@@ -141,15 +146,17 @@ function App() {
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
+              placeholder="Enter password"
               autoComplete="current-password"
             />
           </div>
-          {error && <p style={{ color: 'red', marginTop: '0.5rem' }}>{error}</p>}
-          <button type="submit" style={{ marginTop: '1rem' }}>Login</button>
+          {error && <p className="login-error">{error}</p>}
+          <button type="submit" className="login-button">Login</button>
         </form>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   // ===== RENDER DASHBOARD IF LOGGED IN =====
   return (
@@ -169,15 +176,7 @@ function App() {
           <span className="switch-label">{isOn ? 'ON' : 'OFF'}</span>
           <button
             onClick={handleLogout}
-            style={{
-              padding: '0.3rem 0.7rem',
-              fontSize: '0.9rem',
-              cursor: 'pointer',
-              borderRadius: '4px',
-              border: 'none',
-              backgroundColor: '#ff4d4d',
-              color: 'white',
-            }}
+            className="logout-button"
             title="Logout"
           >
             Logout

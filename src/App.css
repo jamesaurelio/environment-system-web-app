@@ -4,7 +4,7 @@ body {
   font-family: "Barlow", sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #282c34;
+
 }
 
 .app-container {
@@ -251,22 +251,84 @@ input:checked+.slider:before {
   opacity: 0;
 }
 
+.login-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* vertically center everything */
+  min-height: 100vh;
+  background-color: black;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+
+}
+
+/* Logo styling */
+.logo-wrapper {
+  margin-bottom: 5px;
+  margin-top: -60px;   /* shift logo up */
+  flex-shrink: 0;
+}
+
+.login-logo {
+  width: 180px; /* bigger logo */
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+
 .login-container {
   max-width: 350px;
-  margin: 10vh auto;
+  margin: -5px;
   padding: 2rem;
-  background-color: #f2f7fa;
-  border-radius: 8px;
-  box-shadow: 0 0 10px #ccc;
+  background-color:  #1c1c2e;
+  border-radius: 16px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+  color: white; /* text color white for contrast */
   text-align: center;
+}
+
+
+
+.login-container h2 {
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
 }
 
 .login-form input {
   width: 100%;
   padding: 0.4rem;
   font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid #3a4a72;
+  border-radius: 5px;
+  box-sizing: border-box;
+  background-color: #e9f0ff; /* very light pastel blue */
+  color: #152f57; /* dark blue text */
+}
+
+.login-error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: -0.5rem;
 }
 
 .login-form button {
@@ -275,14 +337,32 @@ input:checked+.slider:before {
   background-color: #2196f3;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 1rem;
 }
 
 .login-form button:hover {
   background-color: #0b7dda;
 }
 
+.logout-button {
+  background-color: #f44336; /* red */
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  outline: none;
+  margin: 0;
+}
 
+.logout-button:hover {
+  background-color: #d32f2f; /* darker red */
+}
+
+.logout-button:focus {
+  outline: none;
+}
