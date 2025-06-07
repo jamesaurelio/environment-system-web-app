@@ -215,6 +215,7 @@ function App() {
       </div>
     );
   }
+
   // Render dashboard if logged in
   else {
     return (
@@ -247,7 +248,7 @@ function App() {
           <img src={Logo} alt="KLIMA-X Logo" className="off-logo" />
         </div>
 
-        {/* Main content */}
+        {/* Latest data */}
         <div className="app-container">
           <div className="card-grid">
             <Card title="Temperature" value={`${Number(latestData.temperature).toFixed(2)} °C`} isOn={isOn} />
@@ -257,6 +258,7 @@ function App() {
           </div>
         </div>
 
+        {/* Data graphs */}
         <div style={{ textAlign: 'center' }}>
           <h2>🌡️ Temperature 🌡️</h2>
           <Graphs title="Temperature" data={dataArray} sensorKey="temperature" eulKey="T_eul" rk4Key="T_rk4" />
