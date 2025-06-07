@@ -18,6 +18,7 @@ function App() {
 
   const validUser = import.meta.env.VITE_USERNAME;
   const validPass = import.meta.env.VITE_PASSWORD;
+  const serverUrl = import.meta.env.VITE_SERVER_URL
 
   const handleLogout = () => {
     setLoggedIn(false);
@@ -82,7 +83,7 @@ function App() {
     if (!loggedIn) return; // only fetch if logged in
 
     const fetchData = () => {
-      fetch("http://localhost:8081/api/sensorData")
+      fetch(`${serverUrl}/api/sensorData`)
         .then(res => res.json())
         .then(json => {
           const newData = json.length ? json[json.length - 1] : null;
@@ -147,7 +148,7 @@ function App() {
 
   const sendSensorData = async (data) => {
     try {
-      const response = await fetch('http://localhost:8081/api/sensorData', {
+      const response = await fetch(`${serverUrl}/api/sensorData`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -161,7 +162,7 @@ function App() {
 
   const sendControlSignal = async (state) => {
     try {
-      const response = await fetch('http://localhost:8081/api/control', {
+      const response = await fetch(`${serverUrl}/api/control`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ state }),
