@@ -128,7 +128,7 @@ function App() {
     const interval = setInterval(fetchData, 5000);
 
     return () => clearInterval(interval);
-  }, [loggedIn]);
+  }, [loggedIn, isOn]);
 
   const handleToggle = () => {
     setIsOn(prev => {
@@ -138,26 +138,8 @@ function App() {
 
       sendControlSignal(newState ? 'ON' : 'OFF');
 
-      if (!prev) {
-        sendSensorData(latestData);
-      }
-
       return newState;
     });
-  };
-
-  const sendSensorData = async (data) => {
-    try {
-      const response = await fetch(`${serverUrl}/api/sensorData`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) throw new Error('Failed to send sensor data');
-      console.log('Sensor data sent successfully');
-    } catch (error) {
-      console.error('Error sending sensor data:', error);
-    }
   };
 
   const sendControlSignal = async (state) => {
