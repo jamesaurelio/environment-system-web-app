@@ -5,22 +5,21 @@ import Logo from './assets/logo.png';
 import Graphs from './components/Graphs';
 
 function App() {
-  // ===== LOGIN STATE =====
+  // Login state
   const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  // ===== DASHBOARD STATE =====
+  // Dashboard state
   const [isOn, setIsOn] = useState(false);
   const [dataArray, setDataArray] = useState([]);
   const latestData = dataArray[dataArray.length - 1] || {};
 
-  // ===== LOGIN HANDLER =====
-  const validUser = 'KLIMA-X';        // hardcoded username
-  const validPass = 'klima123';  // hardcoded password
 
-  // ===== LOGOUT HANDLER =====
+  const validUser = import.meta.env.VITE_USERNAME;
+  const validPass = import.meta.env.VITE_PASSWORD;
+
   const handleLogout = () => {
     setLoggedIn(false);
     setUsername('');
@@ -28,7 +27,7 @@ function App() {
     setError('');
     setIsOn(false);
     setDataArray([]);
-    document.body.style.backgroundColor = '#000000'; // reset background
+    document.body.style.backgroundColor = '#000000';
   };
 
   const handleLogin = (e) => {
@@ -79,7 +78,7 @@ function App() {
   };
 
 
-  // ===== DATA FETCHING =====
+  // Data fetching and adding simulated values
   useEffect(() => {
     if (!loggedIn) return; // only fetch if logged in
 
@@ -131,7 +130,6 @@ function App() {
     return () => clearInterval(interval);
   }, [loggedIn]);
 
-  // ===== TOGGLE HANDLER =====
   const handleToggle = () => {
     setIsOn(prev => {
       const newState = !prev;
@@ -148,7 +146,6 @@ function App() {
     });
   };
 
-  // ===== SEND SENSOR DATA =====
   const sendSensorData = async (data) => {
     try {
       const response = await fetch('http://localhost:8081/api/sensorData', {
@@ -163,7 +160,6 @@ function App() {
     }
   };
 
-  // ===== SEND CONTROL SIGNAL =====
   const sendControlSignal = async (state) => {
     try {
       const response = await fetch('http://localhost:8081/api/control', {
@@ -178,101 +174,102 @@ function App() {
     }
   };
 
-  // ===== RENDER LOGIN FORM IF NOT LOGGED IN =====
-if (!loggedIn) {
-  return (
-    <div className="login-wrapper">
-      <div className="logo-wrapper">
-        <img src={Logo} alt="KLIMA-X Logo" className="login-logo" />
+  // Render login form if not logged in
+  if (!loggedIn) {
+    return (
+      <div className="login-wrapper">
+        <div className="logo-wrapper">
+          <img src={Logo} alt="KLIMA-X Logo" className="login-logo" />
+        </div>
+        <div className="login-container">
+          <h2>Login to KLIMA-X Dashboard</h2>
+          <form onSubmit={handleLogin} className="login-form">
+            <div className="form-group">
+              <label htmlFor="username">Username:</label><br />
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                required
+                placeholder="Enter username"
+                autoComplete="username"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="password">Password:</label><br />
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                placeholder="Enter password"
+                autoComplete="current-password"
+              />
+            </div>
+            {error && <p className="login-error">{error}</p>}
+            <button type="submit" className="login-button">Login</button>
+          </form>
+        </div>
       </div>
-      <div className="login-container">
-        <h2>Login to KLIMA-X Dashboard</h2>
-        <form onSubmit={handleLogin} className="login-form">
-          <div className="form-group">
-            <label htmlFor="username">Username:</label><br />
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
-              required
-              placeholder="Enter username"
-              autoComplete="username"
-            />
+    );
+  }
+  // Render dashboard if logged in
+  else {
+    return (
+      <>
+        <div className="header">
+          <div className="logo-container">
+            <img src={Logo} alt="Logo" className={`logo ${isOn ? 'logo-on' : 'logo-off'}`} />
           </div>
-          <div className="form-group">
-            <label htmlFor="password">Password:</label><br />
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              placeholder="Enter password"
-              autoComplete="current-password"
-            />
+          <div className="title-container">
+            <h1 className={`title ${isOn ? 'title-on' : 'title-off'}`}>KLIMA-X Monitoring Dashboard</h1>
           </div>
-          {error && <p className="login-error">{error}</p>}
-          <button type="submit" className="login-button">Login</button>
-        </form>
-      </div>
-    </div>
-  );
-}
-
-  // ===== RENDER DASHBOARD IF LOGGED IN =====
-  return (
-    <>
-      <div className="header">
-        <div className="logo-container">
-          <img src={Logo} alt="Logo" className={`logo ${isOn ? 'logo-on' : 'logo-off'}`} />
+          <div className="switch-container">
+            <label className="switch">
+              <input type="checkbox" checked={isOn} onChange={handleToggle} />
+              <span className="slider round"></span>
+            </label>
+            <span className="switch-label">{isOn ? 'ON' : 'OFF'}</span>
+            <button
+              onClick={handleLogout}
+              className="logout-button"
+              title="Logout"
+            >
+              Logout
+            </button>
+          </div>
         </div>
-        <div className="title-container">
-          <h1 className={`title ${isOn ? 'title-on' : 'title-off'}`}>KLIMA-X Monitoring Dashboard</h1>
-        </div>
-        <div className="switch-container">
-          <label className="switch">
-            <input type="checkbox" checked={isOn} onChange={handleToggle} />
-            <span className="slider round"></span>
-          </label>
-          <span className="switch-label">{isOn ? 'ON' : 'OFF'}</span>
-          <button
-            onClick={handleLogout}
-            className="logout-button"
-            title="Logout"
-          >
-            Logout
-          </button>
-        </div>
-      </div>
 
-      {/* Overlay for OFF state */}
-      <div className={`off-overlay ${isOn ? 'off-hidden' : ''}`}>
-        <img src={Logo} alt="KLIMA-X Logo" className="off-logo" />
-      </div>
-
-      {/* Main content */}
-      <div className="app-container">
-        <div className="card-grid">
-          <Card title="Temperature" value={`${Number(latestData.temperature).toFixed(2)} °C`} isOn={isOn} />
-          <Card title="Humidity" value={`${Number(latestData.humidity).toFixed(2)} %`} isOn={isOn} />
-          <Card title="CO₂" value={`${latestData.co2} ppm`} isOn={isOn} />
-          <Card title="Light" value={`${Number(latestData.light).toFixed(2)} lux`} isOn={isOn} />
+        {/* Overlay for OFF state */}
+        <div className={`off-overlay ${isOn ? 'off-hidden' : ''}`}>
+          <img src={Logo} alt="KLIMA-X Logo" className="off-logo" />
         </div>
-      </div>
 
-      <div style={{ textAlign: 'center' }}>
-        <h2>🌡️ Temperature 🌡️</h2>
-        <Graphs title="Temperature" data={dataArray} sensorKey="temperature" eulKey="T_eul" rk4Key="T_rk4" />
-        <h2>💧 Humidity 💧</h2>
-        <Graphs title="Humidity" data={dataArray} sensorKey="humidity" eulKey="H_eul" rk4Key="H_rk4" />
-        <h2>🟢 Carbon Dioxide 🟢</h2>
-        <Graphs title="CO₂" data={dataArray} sensorKey="co2" eulKey="C_eul" rk4Key="C_rk4" />
-        <h2>🌞 Light 🌞</h2>
-        <Graphs title="Light" data={dataArray} sensorKey="light" eulKey="L_eul" rk4Key="L_rk4" />
-      </div>
-    </>
-  );
+        {/* Main content */}
+        <div className="app-container">
+          <div className="card-grid">
+            <Card title="Temperature" value={`${Number(latestData.temperature).toFixed(2)} °C`} isOn={isOn} />
+            <Card title="Humidity" value={`${Number(latestData.humidity).toFixed(2)} %`} isOn={isOn} />
+            <Card title="CO₂" value={`${latestData.co2} ppm`} isOn={isOn} />
+            <Card title="Light" value={`${Number(latestData.light).toFixed(2)} lux`} isOn={isOn} />
+          </div>
+        </div>
+
+        <div style={{ textAlign: 'center' }}>
+          <h2>🌡️ Temperature 🌡️</h2>
+          <Graphs title="Temperature" data={dataArray} sensorKey="temperature" eulKey="T_eul" rk4Key="T_rk4" />
+          <h2>💧 Humidity 💧</h2>
+          <Graphs title="Humidity" data={dataArray} sensorKey="humidity" eulKey="H_eul" rk4Key="H_rk4" />
+          <h2>🟢 Carbon Dioxide 🟢</h2>
+          <Graphs title="CO₂" data={dataArray} sensorKey="co2" eulKey="C_eul" rk4Key="C_rk4" />
+          <h2>🌞 Light 🌞</h2>
+          <Graphs title="Light" data={dataArray} sensorKey="light" eulKey="L_eul" rk4Key="L_rk4" />
+        </div>
+      </>
+    );
+  }
 }
 
 export default App;
