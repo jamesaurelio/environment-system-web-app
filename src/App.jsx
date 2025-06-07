@@ -16,7 +16,6 @@ function App() {
   const [dataArray, setDataArray] = useState([]);
   const latestData = dataArray[dataArray.length - 1] || {};
 
-
   const validUser = import.meta.env.VITE_USERNAME;
   const validPass = import.meta.env.VITE_PASSWORD;
 
