@@ -2,8 +2,11 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const dotenv = require('dotenv');
 
-const allowedOrigins = ["http://localhost:5173"];
+dotenv.config();
+
+const allowedOrigins = [process.env.WEB_APP_URL];
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 app.use(bodyParser.json());
@@ -59,7 +62,8 @@ app.get("/api/sensorData", (req, res) => {
 });
 
 // Start server
-app.listen(8081, () => {
-  console.log("✅ Server started at: http://localhost:8081");
-  console.log("📦 Try the API at: http://localhost:8081/api");
+app.listen(process.env.API_PORT, () => {
+  console.log(`🌐 Server is running on ${process.env.SERVER_URL}`);
+  console.log(`💻 Check data at ${process.env.SERVER_URL}/api/sensorData`);
+  console.log(`⚙️  Check status and control at ${process.env.SERVER_URL}/api/control & ${process.env.SERVER_URL}/api/status`);
 });
