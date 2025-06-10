@@ -6,7 +6,9 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const allowedOrigins = [process.env.WEB_APP_URL];
+const allowedOrigins = [
+  'https://jamesaurelio.github.io/environment-system-web-app',
+  process.env.WEB_APP_URL];
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 app.use(bodyParser.json());
@@ -49,9 +51,9 @@ app.post("/api/sensorData", (req, res) => {
 
   sensorData.push(dataWithTimestamp);
 
-  res.status(200).json({ 
-    message: "Sensor data saved successfully", 
-    data: dataWithTimestamp 
+  res.status(200).json({
+    message: "Sensor data saved successfully",
+    data: dataWithTimestamp
   });
 });
 
