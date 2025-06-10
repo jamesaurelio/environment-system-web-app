@@ -61,8 +61,10 @@ app.get("/api/sensorData", (req, res) => {
   res.status(200).json(sensorData);
 });
 
+const PORT = process.env.API_PORT || 8081;
+
 // Start server
-app.listen(process.env.API_PORT, () => {
+app.listen(PORT, () => {
   console.log(`🌐 Server is running on ${process.env.SERVER_URL}`);
   console.log(`💻 Check data at ${process.env.SERVER_URL}/api/sensorData`);
   console.log(`⚙️  Check status and control at ${process.env.SERVER_URL}/api/control & ${process.env.SERVER_URL}/api/status`);
