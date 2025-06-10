@@ -6,10 +6,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const allowedOrigins = [
-  'http://localhost:5173',
-  process.env.WEB_APP_URL
-];
+const allowedOrigins = [process.env.WEB_APP_URL];
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 app.use(bodyParser.json());
