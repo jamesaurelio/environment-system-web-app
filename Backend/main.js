@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const allowedOrigins = [
-  'https://jamesaurelio.github.io/environment-system-web-app',
+  'https://jamesaurelio.github.io',
   process.env.WEB_APP_URL];
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 
