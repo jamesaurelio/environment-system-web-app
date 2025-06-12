@@ -8,7 +8,7 @@ function Card({ title, value, isOn }) {
   const isLight = lowerTitle === 'light';
 
   const numericValue = parseFloat(value);
-  const isLoading = isNaN(numericValue);
+  const isLoading = isNaN(numericValue) || numericValue === null;
 
   const tempIcon = numericValue > 30 ? "🔥" : numericValue < 15 ? "🧊" : "🌡️";
   const tempColor = numericValue > 30 ? "#ff4d4f" : numericValue < 15 ? "#00bfff" : "#ffaa00";
