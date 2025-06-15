@@ -115,7 +115,7 @@ function App() {
                   C_rk4,
                   L_rk4,
                 };
-                return updated.slice(-5);
+                return updated.slice(-10);
               }
               return prev;
             });
